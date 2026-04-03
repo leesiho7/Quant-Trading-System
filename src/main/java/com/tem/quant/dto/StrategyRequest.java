@@ -25,6 +25,11 @@ public class StrategyRequest {
     private Integer regPeriod = 20;
     private Double regThreshold = 2.5;
 
+    // LR_V2 파라미터
+    private Integer lrV2WindowSize = 100;
+    private Double  lrV2Multiplier = 2.0;
+    private Boolean lrV2RsiFilter  = false;
+
     private Double stopLoss = 5.0;
     private Double takeProfit = 10.0;
     private Double positionSize = 100.0;

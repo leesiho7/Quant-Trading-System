@@ -142,9 +142,9 @@
                             <div class="font-semibold">Bollinger</div>
                             <div class="text-xs">지원 예정</div>
                         </button>
-                        <button disabled class="text-sm px-4 py-3 rounded-lg bg-slate-800/40 text-slate-600 border border-slate-800 cursor-not-allowed">
-                            <div class="font-semibold">MACD</div>
-                            <div class="text-xs">지원 예정</div>
+                        <button onclick="toggleIndicator('lrv2')" id="btn-lrv2" class="indicator-btn text-sm px-4 py-3 rounded-lg bg-slate-800 text-white border border-slate-700">
+                            <div class="font-semibold">LR Channel</div>
+                            <div class="text-xs text-slate-400">V2 양방향</div>
                         </button>
                     </div>
                     <!-- 현재 선택된 전략 모드 표시 -->
@@ -226,6 +226,36 @@
                                 <span class="text-green-400 font-semibold" id="rsi-oversold-value">30</span>
                             </div>
                             <input type="range" id="rsi-oversold-slider" min="10" max="40" value="30" class="slider-input w-full" oninput="updateValue('rsi-oversold', this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LR Channel V2 Parameters -->
+                <div id="lrv2-params" class="mb-5 bg-slate-800/50 rounded-xl p-4 border border-purple-700/50 hidden">
+                    <h3 class="text-sm font-semibold text-purple-300 mb-1">LR Channel V2 파라미터</h3>
+                    <p class="text-xs text-slate-500 mb-3">채널 상단 돌파 → Short / 하단 돌파 → Long / 중심선 복귀 → 익절</p>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-slate-400">윈도우 크기 (봉 수)</span>
+                                <span class="text-purple-400 font-semibold" id="lrv2-window-value">100</span>
+                            </div>
+                            <input type="range" id="lrv2-window-slider" min="20" max="300" value="100" step="10"
+                                class="slider-input w-full" oninput="updateValue('lrv2-window', this.value)">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-slate-400">채널 폭 배수 (std × ?)</span>
+                                <span class="text-purple-400 font-semibold" id="lrv2-mult-value">2.0</span>
+                            </div>
+                            <input type="range" id="lrv2-mult-slider" min="0.5" max="5.0" value="2.0" step="0.5"
+                                class="slider-input w-full" oninput="updateValue('lrv2-mult', this.value)">
+                        </div>
+                        <div class="flex items-center gap-3 pt-1">
+                            <input type="checkbox" id="lrv2-rsi-filter" class="w-4 h-4 accent-purple-500">
+                            <label for="lrv2-rsi-filter" class="text-xs text-slate-300">
+                                RSI 필터 적용 (숏 진입 시 RSI &gt; 70 확인)
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -596,14 +626,30 @@
         }
 
         function updateSignalModeLabel() {
-            const hasRsi = activeIndicators.has('rsi');
-            const hasLr  = activeIndicators.has('regression');
+            const hasRsi  = activeIndicators.has('rsi');
+            const hasLr   = activeIndicators.has('regression');
+            const hasLrV2 = activeIndicators.has('lrv2');
+
+            // LR_V2 패널 표시/숨김
+            document.getElementById('lrv2-params').classList.toggle('hidden', !hasLrV2);
+
             let label = '';
-            if (hasRsi && hasLr)       label = 'COMBINED (RSI + Linear Reg)';
+            if (hasLrV2)               label = 'LR_V2 (채널 양방향 전략)';
+            else if (hasRsi && hasLr)  label = 'COMBINED (RSI + Linear Reg)';
             else if (hasLr && !hasRsi) label = 'LR_ONLY (Linear Reg만)';
             else if (hasRsi && !hasLr) label = 'RSI_ONLY (RSI만)';
             else                        label = 'RSI_ONLY (기본값)';
             document.getElementById('signal-mode-label').textContent = label;
+        }
+
+        function getSignalMode() {
+            const hasRsi  = activeIndicators.has('rsi');
+            const hasLr   = activeIndicators.has('regression');
+            const hasLrV2 = activeIndicators.has('lrv2');
+            if (hasLrV2)              return 'LR_V2';
+            if (hasRsi && hasLr)      return 'COMBINED';
+            if (hasLr && !hasRsi)     return 'LR_ONLY';
+            return 'RSI_ONLY';
         }
 
         // Update Slider Values
@@ -621,13 +667,7 @@
             document.getElementById('trade-log').innerHTML =
                 '<tr><td colspan="5" class="text-center text-slate-400 py-6">분석 중...</td></tr>';
 
-            // signal mode 결정
-            let signalMode = 'RSI_ONLY';
-            const hasRsi = activeIndicators.has('rsi');
-            const hasLr  = activeIndicators.has('regression');
-            if (hasRsi && hasLr)       signalMode = 'COMBINED';
-            else if (hasLr && !hasRsi) signalMode = 'LR_ONLY';
-            else                        signalMode = 'RSI_ONLY';
+            const signalMode = getSignalMode();
 
             // 날짜 기본값 (없으면 1년)
             const today = new Date().toISOString().split('T')[0];
@@ -642,11 +682,14 @@
                 interval:       document.getElementById('interval-select').value,
                 signalMode:     signalMode,
                 initialCapital: parseFloat(document.getElementById('initial-capital-input').value) || 10000,
-                rsiPeriod:      parseInt(document.getElementById('rsi-period-slider').value),
-                rsiOverbought:  parseInt(document.getElementById('rsi-overbought-slider').value),
-                rsiOversold:    parseInt(document.getElementById('rsi-oversold-slider').value),
-                regPeriod:      parseInt(document.getElementById('reg-period-slider').value),
-                positionSize:   parseInt(document.getElementById('position-size-slider').value)
+                rsiPeriod:       parseInt(document.getElementById('rsi-period-slider').value),
+                rsiOverbought:   parseInt(document.getElementById('rsi-overbought-slider').value),
+                rsiOversold:     parseInt(document.getElementById('rsi-oversold-slider').value),
+                regPeriod:       parseInt(document.getElementById('reg-period-slider').value),
+                positionSize:    parseInt(document.getElementById('position-size-slider').value),
+                lrV2WindowSize:  parseInt(document.getElementById('lrv2-window-slider').value),
+                lrV2Multiplier:  parseFloat(document.getElementById('lrv2-mult-slider').value),
+                lrV2RsiFilter:   document.getElementById('lrv2-rsi-filter').checked
             };
 
             try {
@@ -685,17 +728,20 @@
                 // 거래 내역 테이블 렌더링
                 if (data.tradeLog && data.tradeLog.length > 0) {
                     const tradeLogHtml = data.tradeLog.map(trade => {
-                        const profit = trade['return_pct'] || 0;
-                        const isWin  = trade['is_winner'];
-                        const entry  = (trade['entry_price'] || 0).toFixed(2);
-                        const exit   = (trade['exit_price']  || 0).toFixed(2);
-                        const date   = trade['entry_date'] || '';
+                        const profit   = trade['return_pct'] || 0;
+                        const isWin    = trade['is_winner'];
+                        const posType  = trade['position_type'] || 'LONG';
+                        const entry    = (trade['entry_price'] || 0).toFixed(2);
+                        const exit     = (trade['exit_price']  || 0).toFixed(2);
+                        const date     = trade['entry_date'] || '';
+                        const isShort  = posType === 'SHORT';
+                        const typeColor = isShort ? 'bg-orange-500/20 text-orange-400' : 'bg-blue-500/20 text-blue-400';
                         return `
                         <tr class="border-b border-slate-800 hover:bg-slate-800/50">
                             <td class="py-3 px-2 text-slate-300">${date}</td>
                             <td class="py-3 px-2">
-                                <span class="text-xs px-2 py-1 rounded ${isWin ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">
-                                    ${isWin ? '매수승' : '매수손'}
+                                <span class="text-xs px-2 py-1 rounded ${typeColor}">
+                                    ${isShort ? 'SHORT' : 'LONG'}
                                 </span>
                             </td>
                             <td class="py-3 px-2 text-right text-slate-300">$${entry}</td>

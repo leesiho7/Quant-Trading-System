@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 public class PyTradeLog {
-    @JsonProperty("trade_no")    private Integer tradeNo;
+    @JsonProperty("trade_no")      private Integer tradeNo;
+    @JsonProperty("position_type") private String  positionType;
     @JsonProperty("entry_date")  private String  entryDate;
     @JsonProperty("entry_price") private Double  entryPrice;
     @JsonProperty("exit_date")   private String  exitDate;

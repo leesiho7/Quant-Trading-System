@@ -25,6 +25,15 @@ public class PyBacktestRequest {
         @JsonProperty("signal_mode") private String signalMode;
         private RsiConfig rsi;
         @JsonProperty("linear_regression") private LinearRegressionConfig linearRegression;
+        @JsonProperty("lr_v2") private LrV2Config lrV2;
+    }
+
+    @Data @Builder
+    public static class LrV2Config {
+        @JsonProperty("window_size")   private Integer windowSize;
+        @JsonProperty("multiplier")    private Double  multiplier;
+        @JsonProperty("rsi_filter")    private Boolean rsiFilter;
+        @JsonProperty("rsi_threshold") private Double  rsiThreshold;
     }
 
     @Data @Builder
