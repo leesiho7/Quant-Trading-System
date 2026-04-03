@@ -52,6 +52,8 @@ public class BacktestServiceImpl implements BacktestService {
                     .positionSizePct(req.getPositionSize() / 100.0)
                     .commissionPct(0.001)
                     .slippagePct(0.0)
+                    .takeProfitPct(req.getTakeProfit() != null ? req.getTakeProfit() / 100.0 : 0.0)
+                    .stopLossPct(req.getStopLoss()    != null ? req.getStopLoss()    / 100.0 : 0.0)
                     .build())
                 .build();
 

@@ -55,5 +55,7 @@ public class PyBacktestRequest {
         @JsonProperty("position_size_pct") private Double positionSizePct;
         @JsonProperty("commission_pct")    private Double commissionPct;
         @JsonProperty("slippage_pct")      private Double slippagePct;
+        @JsonProperty("take_profit_pct")   private Double takeProfitPct;
+        @JsonProperty("stop_loss_pct")     private Double stopLossPct;
     }
 }
