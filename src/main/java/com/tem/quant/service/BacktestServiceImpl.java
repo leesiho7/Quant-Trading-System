@@ -1,50 +1,95 @@
 package com.tem.quant.service;
 
-import com.tem.quant.dto.StrategyRequest;
-import com.tem.quant.dto.BacktestResult;
-import com.tem.quant.entity.MarketData;
-import com.tem.quant.repository.MarketDataRepository;
+import com.tem.quant.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.ArrayList;
-
-/**
- * 실제 백테스팅 로직을 수행하는 서비스 구현체
- */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BacktestServiceImpl implements BacktestService {
 
-    private final MarketDataRepository marketDataRepository;
+    private final RestTemplate restTemplate;
+
+    @Value("${python.api.url}")
+    private String pythonApiUrl;
 
     @Override
-    public BacktestResult calculate(StrategyRequest request) {
-        // 1. DB에서 과거 시세 데이터 가져오기 
-        List<MarketData> candles = marketDataRepository.findTop100BySymbolAndIntervalOrderByTimestampDesc(
-                request.getSymbol(), request.getCandleInterval());
+    public BacktestResult calculate(StrategyRequest req) {
+        try {
+            PyBacktestRequest pyReq = PyBacktestRequest.builder()
+                .dataProvider(PyBacktestRequest.DataProviderConfig.builder()
+                    .ticker(req.getTicker())
+                    .startDate(req.getStartDate())
+                    .endDate(req.getEndDate())
+                    .interval("1d")
+                    .build())
+                .strategy(PyBacktestRequest.StrategyConfig.builder()
+                    .signalMode(req.getSignalMode())
+                    .rsi(PyBacktestRequest.RsiConfig.builder()
+                        .period(req.getRsiPeriod())
+                        .oversold(req.getRsiOversold().doubleValue())
+                        .overbought(req.getRsiOverbought().doubleValue())
+                        .build())
+                    .linearRegression(PyBacktestRequest.LinearRegressionConfig.builder()
+                        .period(req.getRegPeriod())
+                        .slopeThreshold(0.0)
+                        .build())
+                    .build())
+                .backtest(PyBacktestRequest.BacktestConfig.builder()
+                    .initialCapital(req.getInitialCapital())
+                    .positionSizePct(req.getPositionSize())
+                    .commissionPct(0.001)
+                    .slippagePct(0.0)
+                    .build())
+                .build();
 
-        // 2. 전략 알고리즘 실행 (RSI, 선형 회귀 계산)
-        List<String> labels = new ArrayList<>();
-        List<Double> equityCurve = new ArrayList<>();
-        
-        // 차트 테스트를 위한 더미 데이터 생성
-        for(int i=0; i<10; i++) {
-            labels.add("Point " + i);
-            equityCurve.add(100.0 + (i * 1.5));
-        }
+            log.info("파이썬 백테스팅 API 호출: {} {}", req.getTicker(), req.getSignalMode());
 
-        // 3. 결과 조립 및 반환
-        return BacktestResult.builder()
-                .totalReturn(15.5)      // 총 수익률 15.5%
-                .winRate(65.0)         // 승률 65%
-                .mdd(4.2)              // 최대 낙폭 4.2%
-                .totalTrades(12)       // 총 거래 12회
-                .finalBalance(1155.0)  // 최종 자산
-                .labels(labels)        // 차트 X축
-                .equityCurve(equityCurve) // 차트 Y축 (자산곡선)
+            ResponseEntity<PyBacktestResponse> resp = restTemplate.postForEntity(
+                pythonApiUrl + "/api/v1/backtest",
+                pyReq,
+                PyBacktestResponse.class
+            );
+
+            PyBacktestResponse py = resp.getBody();
+            if (py == null) {
+                return errorResult("파이썬 API에서 빈 응답을 반환했습니다.");
+            }
+
+            return BacktestResult.builder()
+                .totalReturn(py.getTotalReturnPct())
+                .winRate(py.getWinRatePct())
+                .mdd(py.getMddPct())
+                .totalTrades(py.getTotalTrades())
+                .finalBalance(py.getFinalCapital())
+                .sharpeRatio(py.getSharpeRatio())
+                .avgProfit(py.getAvgProfit())
+                .avgLoss(py.getAvgLoss())
+                .winningTrades(py.getWinningTrades())
+                .losingTrades(py.getLosingTrades())
+                .labels(py.getLabels())
+                .equityCurve(py.getEquityCurve())
+                .drawdowns(py.getDrawdownCurve())
+                .tradeLog(py.getTradeLog())
                 .message("백테스팅이 성공적으로 완료되었습니다.")
                 .build();
+
+        } catch (HttpClientErrorException e) {
+            log.error("파이썬 API 오류: {} {}", e.getStatusCode(), e.getResponseBodyAsString());
+            return errorResult("데이터 오류: " + e.getResponseBodyAsString());
+        } catch (Exception e) {
+            log.error("백테스팅 실패: {}", e.getMessage());
+            return errorResult("파이썬 API 연결 실패: " + e.getMessage());
+        }
+    }
+
+    private BacktestResult errorResult(String msg) {
+        return BacktestResult.builder().error(msg).build();
     }
 }

@@ -149,6 +149,35 @@
                     </div>
                 </div>
 
+                <!-- 종목 / 기간 설정 -->
+                <div class="mb-5 bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-sm font-semibold text-white mb-3">종목 및 기간 설정</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1 block">티커 (Yahoo Finance 형식)</label>
+                            <input type="text" id="ticker-input" value="BTC-USD" placeholder="BTC-USD, AAPL, TSLA 등"
+                                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm placeholder-slate-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-xs text-slate-400 mb-1 block">시작일</label>
+                                <input type="date" id="start-date-input"
+                                    class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 mb-1 block">종료일</label>
+                                <input type="date" id="end-date-input"
+                                    class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1 block">초기 자본 (USD)</label>
+                            <input type="number" id="initial-capital-input" value="10000" min="1000" step="1000"
+                                class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- RSI Parameters -->
                 <div id="rsi-params" class="mb-5 bg-slate-800/50 rounded-xl p-4 border border-slate-700">
                     <h3 class="text-sm font-semibold text-white mb-3">RSI 파라미터</h3>
@@ -158,21 +187,21 @@
                                 <span class="text-slate-400">기간 (Period)</span>
                                 <span class="text-blue-400 font-semibold" id="rsi-period-value">14</span>
                             </div>
-                            <input type="range" min="7" max="30" value="14" class="slider-input w-full" oninput="updateValue('rsi-period', this.value)">
+                            <input type="range" id="rsi-period-slider" min="7" max="30" value="14" class="slider-input w-full" oninput="updateValue('rsi-period', this.value)">
                         </div>
                         <div>
                             <div class="flex justify-between text-xs mb-2">
                                 <span class="text-slate-400">과매수 (Overbought)</span>
                                 <span class="text-red-400 font-semibold" id="rsi-overbought-value">70</span>
                             </div>
-                            <input type="range" min="60" max="90" value="70" class="slider-input w-full" oninput="updateValue('rsi-overbought', this.value)">
+                            <input type="range" id="rsi-overbought-slider" min="60" max="90" value="70" class="slider-input w-full" oninput="updateValue('rsi-overbought', this.value)">
                         </div>
                         <div>
                             <div class="flex justify-between text-xs mb-2">
                                 <span class="text-slate-400">과매도 (Oversold)</span>
                                 <span class="text-green-400 font-semibold" id="rsi-oversold-value">30</span>
                             </div>
-                            <input type="range" min="10" max="40" value="30" class="slider-input w-full" oninput="updateValue('rsi-oversold', this.value)">
+                            <input type="range" id="rsi-oversold-slider" min="10" max="40" value="30" class="slider-input w-full" oninput="updateValue('rsi-oversold', this.value)">
                         </div>
                     </div>
                 </div>
@@ -184,9 +213,9 @@
                         <div>
                             <div class="flex justify-between text-xs mb-2">
                                 <span class="text-slate-400">Look-back Period</span>
-                                <span class="text-cyan-400 font-semibold" id="reg-period-value">50</span>
+                                <span class="text-cyan-400 font-semibold" id="reg-period-value">20</span>
                             </div>
-                            <input type="range" min="20" max="200" value="50" class="slider-input w-full" oninput="updateValue('reg-period', this.value)">
+                            <input type="range" id="reg-period-slider" min="10" max="100" value="20" class="slider-input w-full" oninput="updateValue('reg-period', this.value)">
                         </div>
                         <div>
                             <div class="flex justify-between text-xs mb-2">
@@ -248,9 +277,9 @@
                         <div>
                             <div class="flex justify-between text-xs mb-2">
                                 <span class="text-slate-400">포지션 크기 (%)</span>
-                                <span class="text-blue-400 font-semibold" id="position-size-value">25</span>
+                                <span class="text-blue-400 font-semibold" id="position-size-value">100</span>
                             </div>
-                            <input type="range" min="10" max="100" step="5" value="25" class="slider-input w-full" oninput="updateValue('position-size', this.value)">
+                            <input type="range" id="position-size-slider" min="10" max="100" step="5" value="100" class="slider-input w-full" oninput="updateValue('position-size', this.value)">
                         </div>
                     </div>
                 </div>
@@ -546,93 +575,117 @@
             document.getElementById(`${param}-value`).textContent = value;
         }
 
-        // Run Backtest
-        function runBacktest() {
-            // Show loading state
-            document.getElementById('total-return').innerHTML = '<div class="loading-spinner mx-auto"></div>';
-            
-            setTimeout(() => {
-                // Generate mock backtest results
-                const dates = [];
-                const equity = [];
-                const drawdown = [];
-                const trades = [];
-                
-                let currentEquity = 10000;
-                let maxEquity = 10000;
-                
-                for (let i = 0; i < 30; i++) {
-                    const date = new Date();
-                    date.setDate(date.getDate() - (30 - i));
-                    dates.push(date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }));
-                    
-                    const change = (Math.random() - 0.45) * 500;
-                    currentEquity += change;
-                    equity.push(currentEquity);
-                    
-                    if (currentEquity > maxEquity) maxEquity = currentEquity;
-                    const dd = ((currentEquity - maxEquity) / maxEquity) * 100;
-                    drawdown.push(dd);
+        // Run Backtest (실제 파이썬 API 연동)
+        async function runBacktest() {
+            // 로딩 상태 표시
+            const loadingSpinner = '<div class="loading-spinner mx-auto"></div>';
+            ['total-return','max-drawdown','win-rate','total-trades'].forEach(id => {
+                document.getElementById(id).innerHTML = loadingSpinner;
+            });
+            document.getElementById('trade-log').innerHTML =
+                '<tr><td colspan="5" class="text-center text-slate-400 py-6">분석 중...</td></tr>';
+
+            // signal mode 결정
+            let signalMode = 'RSI_ONLY';
+            const hasRsi = activeIndicators.has('rsi');
+            const hasLr  = activeIndicators.has('regression');
+            if (hasRsi && hasLr)       signalMode = 'COMBINED';
+            else if (hasLr && !hasRsi) signalMode = 'LR_ONLY';
+            else                        signalMode = 'RSI_ONLY';
+
+            // 날짜 기본값 (없으면 1년)
+            const today = new Date().toISOString().split('T')[0];
+            const oneYearAgo = new Date(Date.now() - 365 * 86400000).toISOString().split('T')[0];
+            const startDate = document.getElementById('start-date-input').value || oneYearAgo;
+            const endDate   = document.getElementById('end-date-input').value   || today;
+
+            const payload = {
+                ticker:         document.getElementById('ticker-input').value.trim() || 'BTC-USD',
+                startDate:      startDate,
+                endDate:        endDate,
+                signalMode:     signalMode,
+                initialCapital: parseFloat(document.getElementById('initial-capital-input').value) || 10000,
+                rsiPeriod:      parseInt(document.getElementById('rsi-period-slider').value),
+                rsiOverbought:  parseInt(document.getElementById('rsi-overbought-slider').value),
+                rsiOversold:    parseInt(document.getElementById('rsi-oversold-slider').value),
+                regPeriod:      parseInt(document.getElementById('reg-period-slider').value),
+                positionSize:   parseInt(document.getElementById('position-size-slider').value)
+            };
+
+            try {
+                const response = await fetch('/api/strategy/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(data.error);
+                    return;
                 }
 
-                // Generate sample trades
-                const tradeTypes = ['매수', '매도'];
-                for (let i = 0; i < 8; i++) {
-                    const entryPrice = 65000 + Math.random() * 5000;
-                    const exitPrice = entryPrice * (1 + (Math.random() - 0.4) * 0.1);
-                    const profit = ((exitPrice - entryPrice) / entryPrice) * 100;
-                    
-                    trades.push({
-                        date: dates[Math.floor(Math.random() * dates.length)],
-                        type: tradeTypes[i % 2],
-                        entry: entryPrice.toFixed(0),
-                        exit: exitPrice.toFixed(0),
-                        profit: profit.toFixed(2)
-                    });
-                }
-
-                // Update charts
-                equityChart.data.labels = dates;
-                equityChart.data.datasets[0].data = equity;
+                // 차트 업데이트
+                equityChart.data.labels = data.labels || [];
+                equityChart.data.datasets[0].data = data.equityCurve || [];
                 equityChart.update();
 
-                drawdownChart.data.labels = dates;
-                drawdownChart.data.datasets[0].data = drawdown;
+                drawdownChart.data.labels = data.labels || [];
+                drawdownChart.data.datasets[0].data = data.drawdowns || [];
                 drawdownChart.update();
 
-                // Update metrics
-                const totalReturn = ((currentEquity - 10000) / 10000) * 100;
-                const maxDD = Math.min(...drawdown);
-                const winningTrades = trades.filter(t => parseFloat(t.profit) > 0).length;
-                const winRate = (winningTrades / trades.length) * 100;
+                // 지표 업데이트
+                const tr = data.totalReturn || 0;
+                document.getElementById('total-return').textContent  = `${tr >= 0 ? '+' : ''}${tr.toFixed(2)}%`;
+                document.getElementById('max-drawdown').textContent  = `${(data.mdd || 0).toFixed(2)}%`;
+                document.getElementById('win-rate').textContent      = `${(data.winRate || 0).toFixed(1)}%`;
+                document.getElementById('total-trades').textContent  = data.totalTrades || 0;
+                document.getElementById('sharpe-ratio').textContent  = (data.sharpeRatio || 0).toFixed(2);
+                document.getElementById('avg-win').textContent       = `$${(data.avgProfit || 0).toFixed(2)}`;
+                document.getElementById('avg-loss').textContent      = `$${Math.abs(data.avgLoss || 0).toFixed(2)}`;
 
-                document.getElementById('total-return').textContent = `${totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(2)}%`;
-                document.getElementById('max-drawdown').textContent = `${maxDD.toFixed(2)}%`;
-                document.getElementById('win-rate').textContent = `${winRate.toFixed(1)}%`;
-                document.getElementById('total-trades').textContent = trades.length;
-                document.getElementById('sharpe-ratio').textContent = (1.2 + Math.random() * 0.5).toFixed(2);
-                document.getElementById('avg-win').textContent = `$${(Math.random() * 500 + 200).toFixed(2)}`;
-                document.getElementById('avg-loss').textContent = `$${(Math.random() * 300 + 100).toFixed(2)}`;
+                // 거래 내역 테이블 렌더링
+                if (data.tradeLog && data.tradeLog.length > 0) {
+                    const tradeLogHtml = data.tradeLog.map(trade => {
+                        const profit = trade['return_pct'] || 0;
+                        const isWin  = trade['is_winner'];
+                        const entry  = (trade['entry_price'] || 0).toFixed(2);
+                        const exit   = (trade['exit_price']  || 0).toFixed(2);
+                        const date   = trade['entry_date'] || '';
+                        return `
+                        <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+                            <td class="py-3 px-2 text-slate-300">${date}</td>
+                            <td class="py-3 px-2">
+                                <span class="text-xs px-2 py-1 rounded ${isWin ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">
+                                    ${isWin ? '매수승' : '매수손'}
+                                </span>
+                            </td>
+                            <td class="py-3 px-2 text-right text-slate-300">$${entry}</td>
+                            <td class="py-3 px-2 text-right text-slate-300">$${exit}</td>
+                            <td class="py-3 px-2 text-right font-semibold ${profit >= 0 ? 'text-green-400' : 'text-red-400'}">
+                                ${profit >= 0 ? '+' : ''}${profit.toFixed(2)}%
+                            </td>
+                        </tr>`;
+                    }).join('');
+                    document.getElementById('trade-log').innerHTML = tradeLogHtml;
+                } else {
+                    document.getElementById('trade-log').innerHTML =
+                        '<tr><td colspan="5" class="text-center text-slate-500 py-6">거래 내역 없음</td></tr>';
+                }
 
-                // Update trade log
-                const tradeLogHtml = trades.map(trade => `
-                    <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-                        <td class="py-3 px-2 text-slate-300">${trade.date}</td>
-                        <td class="py-3 px-2">
-                            <span class="text-xs px-2 py-1 rounded ${trade.type === '매수' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">
-                                ${trade.type}
-                            </span>
-                        </td>
-                        <td class="py-3 px-2 text-right text-slate-300">$${trade.entry}</td>
-                        <td class="py-3 px-2 text-right text-slate-300">$${trade.exit}</td>
-                        <td class="py-3 px-2 text-right font-semibold ${parseFloat(trade.profit) >= 0 ? 'text-green-400' : 'text-red-400'}">
-                            ${parseFloat(trade.profit) >= 0 ? '+' : ''}${trade.profit}%
-                        </td>
-                    </tr>
-                `).join('');
-                
-                document.getElementById('trade-log').innerHTML = tradeLogHtml;
-            }, 1500);
+            } catch (err) {
+                showError('서버 연결 오류: ' + err.message);
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('total-return').textContent  = '-';
+            document.getElementById('max-drawdown').textContent  = '-';
+            document.getElementById('win-rate').textContent      = '-';
+            document.getElementById('total-trades').textContent  = '-';
+            document.getElementById('trade-log').innerHTML =
+                `<tr><td colspan="5" class="text-center text-red-400 py-6">${msg}</td></tr>`;
         }
 
         // API Modal Functions
@@ -656,6 +709,11 @@
         // Initialize on page load
         window.addEventListener('load', function() {
             initCharts();
+            // 날짜 기본값 설정
+            const today = new Date().toISOString().split('T')[0];
+            const oneYearAgo = new Date(Date.now() - 365 * 86400000).toISOString().split('T')[0];
+            document.getElementById('start-date-input').value = oneYearAgo;
+            document.getElementById('end-date-input').value   = today;
         });
     </script>
 </body>
