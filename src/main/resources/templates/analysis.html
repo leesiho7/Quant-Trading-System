@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Analysis Feed | KR-CN Crypto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-slate-800">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-slate-900 border-b border-slate-700">
+        <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center gap-3">
+                <a href="/" class="text-slate-300 hover:text-white p-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+                <div>
+                    <h1 class="text-white font-bold text-base leading-tight">Expert Analysis</h1>
+                    <p class="text-slate-400 text-xs">한중 전문가 분석 피드</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button class="text-slate-300 hover:text-white p-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6 pb-20">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+                트레이딩 전략 분석
+            </h2>
+            <span class="bg-blue-500/20 text-blue-400 text-xs px-3 py-1 rounded-full border border-blue-500/50">Live</span>
+        </div>
+
+        <!-- Analysis Posts -->
+        <div class="space-y-4">
+            
+            <!-- Post 1 -->
+            <div class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden">
+                <div class="p-5">
+                    <div class="flex items-start gap-3 mb-4">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=minjun" alt="김민준" class="w-12 h-12 rounded-full bg-slate-700">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-semibold text-white">김민준</span>
+                                <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-0.5 rounded">KR</span>
+                                <span class="bg-green-500/20 text-green-400 text-xs px-2 py-0.5 rounded border border-green-500/50">87% accuracy</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-slate-400 text-xs">
+                                <span>@minjun_crypto</span>
+                                <span>•</span>
+                                <span>2h ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-100 text-sm leading-relaxed mb-4" id="post1-text">
+                        BTC가 $68,500 저항선을 돌파했습니다. RSI 과매수 구간이지만 거래량이 동반되고 있어 $70K까지 상승 가능성이 높습니다.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#BTC</span>
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#Breakout</span>
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#Bullish</span>
+                    </div>
+
+                    <button onclick="toggleTranslation('post1')" class="w-full bg-purple-500/10 border border-purple-500/50 text-purple-400 hover:bg-purple-500/20 py-2 rounded-lg text-sm font-medium transition-colors mb-4 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                        </svg>
+                        AI Smart Translation
+                    </button>
+
+                    <div class="flex items-center gap-6 text-slate-400 text-sm border-t border-slate-800 pt-4">
+                        <button class="flex items-center gap-2 hover:text-green-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                            </svg>
+                            <span>234</span>
+                        </button>
+                        <button class="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <span>45</span>
+                        </button>
+                        <button class="flex items-center gap-2 hover:text-slate-300 transition-colors ml-auto">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post 2 -->
+            <div class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden">
+                <div class="p-5">
+                    <div class="flex items-start gap-3 mb-4">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=zhangwei" alt="张伟" class="w-12 h-12 rounded-full bg-slate-700">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-semibold text-white">张伟</span>
+                                <span class="bg-red-500/20 text-red-400 text-xs px-2 py-0.5 rounded">CN</span>
+                                <span class="bg-green-500/20 text-green-400 text-xs px-2 py-0.5 rounded border border-green-500/50">91% accuracy</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-slate-400 text-xs">
+                                <span>@zhangwei_trader</span>
+                                <span>•</span>
+                                <span>4h ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-100 text-sm leading-relaxed mb-4" id="post2-text">
+                        比特币形成了看涨的线性回归通道。当前价格在上轨附近，建议等待回调至中轨（$67,200）附近再入场。
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#BTC</span>
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#Linear Regression</span>
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#Entry Signal</span>
+                    </div>
+
+                    <button onclick="toggleTranslation('post2')" class="w-full bg-purple-500/10 border border-purple-500/50 text-purple-400 hover:bg-purple-500/20 py-2 rounded-lg text-sm font-medium transition-colors mb-4 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                        </svg>
+                        AI Smart Translation
+                    </button>
+
+                    <div class="flex items-center gap-6 text-slate-400 text-sm border-t border-slate-800 pt-4">
+                        <button class="flex items-center gap-2 hover:text-green-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                            </svg>
+                            <span>189</span>
+                        </button>
+                        <button class="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <span>32</span>
+                        </button>
+                        <button class="flex items-center gap-2 hover:text-slate-300 transition-colors ml-auto">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post 3 -->
+            <div class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden">
+                <div class="p-5">
+                    <div class="flex items-start gap-3 mb-4">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=seojun" alt="박서준" class="w-12 h-12 rounded-full bg-slate-700">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-semibold text-white">박서준</span>
+                                <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-0.5 rounded">KR</span>
+                                <span class="bg-green-500/20 text-green-400 text-xs px-2 py-0.5 rounded border border-green-500/50">84% accuracy</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-slate-400 text-xs">
+                                <span>@seojun_analysis</span>
+                                <span>•</span>
+                                <span>6h ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-100 text-sm leading-relaxed mb-4">
+                        ETH/BTC 비율이 0.05를 돌파. 알트코인 시즌 시작 신호일 수 있습니다. 주요 알트코인 포지션 확대 추천.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#ETH</span>
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#Altseason</span>
+                        <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-full">#Strategy</span>
+                    </div>
+
+                    <button class="w-full bg-purple-500/10 border border-purple-500/50 text-purple-400 hover:bg-purple-500/20 py-2 rounded-lg text-sm font-medium transition-colors mb-4 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                        </svg>
+                        AI Smart Translation
+                    </button>
+
+                    <div class="flex items-center gap-6 text-slate-400 text-sm border-t border-slate-800 pt-4">
+                        <button class="flex items-center gap-2 hover:text-green-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                            </svg>
+                            <span>312</span>
+                        </button>
+                        <button class="flex items-center gap-2 hover:text-blue-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <span>67</span>
+                        </button>
+                        <button class="flex items-center gap-2 hover:text-slate-300 transition-colors ml-auto">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Load More -->
+        <div class="mt-6">
+            <button class="w-full bg-slate-900 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 py-3 rounded-xl font-medium transition-colors">
+                더 많은 분석 보기
+            </button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-700">
+        <div class="grid grid-cols-5 gap-1 px-2 py-2">
+            <a href="/" class="flex flex-col items-center gap-1 py-2 text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                <span class="text-xs">Home</span>
+            </a>
+            
+            <a href="/analysis" class="flex flex-col items-center gap-1 py-2 text-blue-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                </svg>
+                <span class="text-xs">Analysis</span>
+            </a>
+            
+            <a href="/bot/strategy-tester" class="flex flex-col items-center gap-1 py-2 text-slate-400 hover:text-white">
+                <div class="w-11 h-11 -mt-6 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </div>
+                <span class="text-xs text-slate-400">Trade</span>
+            </a>
+            
+            <a href="#" class="flex flex-col items-center gap-1 py-2 text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span class="text-xs">Portfolio</span>
+            </a>
+            
+            <a href="/community" class="flex flex-col items-center gap-1 py-2 text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span class="text-xs">Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const translations = {
+            post1: {
+                original: 'BTC가 $68,500 저항선을 돌파했습니다. RSI 과매수 구간이지만 거래량이 동반되고 있어 $70K까지 상승 가능성이 높습니다.',
+                translated: 'BTC has broken through the $68,500 resistance. Although RSI is in overbought territory, the accompanying volume suggests a high probability of rising to $70K.'
+            },
+            post2: {
+                original: '比特币形成了看涨的线性回归通道。当前价格在上轨附近，建议等待回调至中轨（$67,200）附近再入场。',
+                translated: 'Bitcoin has formed a bullish linear regression channel. Current price is near the upper band, suggest waiting for a pullback to the middle band (~$67,200) before entering.'
+            }
+        };
+
+        const translatedStates = {};
+
+        function toggleTranslation(postId) {
+            const textElement = document.getElementById(`${postId}-text`);
+            if (!translatedStates[postId]) {
+                textElement.textContent = translations[postId].translated;
+                translatedStates[postId] = true;
+            } else {
+                textElement.textContent = translations[postId].original;
+                translatedStates[postId] = false;
+            }
+        }
+    </script>
+
+</body>
+</html>
