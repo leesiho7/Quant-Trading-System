@@ -47,6 +47,10 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-websocket</artifactId>
 </dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
 
 		<!-- devtools는 로컬 개발 전용 - 프로덕션 JAR에서 제외 -->
 		<dependency>
