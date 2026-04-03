@@ -30,6 +30,11 @@ public class BacktestResult {
     private List<Double> equityCurve;
     private List<Double> drawdowns;
 
+    // LR 채널 V2 밴드
+    private List<Double> upperBand;
+    private List<Double> lowerBand;
+    private List<Double> lrCenter;
+
     // 거래 내역
     private List<PyTradeLog> tradeLog;
 

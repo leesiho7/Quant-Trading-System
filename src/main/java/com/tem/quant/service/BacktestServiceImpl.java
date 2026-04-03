@@ -82,6 +82,9 @@ public class BacktestServiceImpl implements BacktestService {
                 .labels(py.getLabels())
                 .equityCurve(py.getEquityCurve())
                 .drawdowns(py.getDrawdownCurve())
+                .upperBand(py.getUpperBand())
+                .lowerBand(py.getLowerBand())
+                .lrCenter(py.getLrCenter())
                 .tradeLog(py.getTradeLog())
                 .message("백테스팅이 성공적으로 완료되었습니다.")
                 .build();

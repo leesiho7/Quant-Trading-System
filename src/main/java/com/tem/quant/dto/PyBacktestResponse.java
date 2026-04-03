@@ -31,5 +31,8 @@ public class PyBacktestResponse {
     private List<String> labels;
     @JsonProperty("equity_curve")    private List<Double> equityCurve;
     @JsonProperty("drawdown_curve")  private List<Double> drawdownCurve;
+    @JsonProperty("upper_band")      private List<Double> upperBand;
+    @JsonProperty("lower_band")      private List<Double> lowerBand;
+    @JsonProperty("lr_center")       private List<Double> lrCenter;
     @JsonProperty("trade_log")       private List<PyTradeLog> tradeLog;
 }
