@@ -3,6 +3,7 @@ package com.tem.quant.repository;
 import com.tem.quant.entity.MarketData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,8 @@ public interface MarketDataRepository extends JpaRepository<MarketData, Long> {
      */
     List<MarketData> findBySymbolAndTimestampAfter(String symbol, LocalDateTime time);
     
-    // 추가 팁: 특정 기간 사이의 데이터를 가져오고 싶을 때 사용
     List<MarketData> findBySymbolAndTimestampBetween(String symbol, LocalDateTime start, LocalDateTime end);
+
+    @Transactional
+    void deleteByTimestampBefore(LocalDateTime cutoff);
 }
