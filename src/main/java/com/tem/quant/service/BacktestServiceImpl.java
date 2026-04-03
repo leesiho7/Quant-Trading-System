@@ -43,7 +43,7 @@ public class BacktestServiceImpl implements BacktestService {
                     .build())
                 .backtest(PyBacktestRequest.BacktestConfig.builder()
                     .initialCapital(req.getInitialCapital())
-                    .positionSizePct(req.getPositionSize())
+                    .positionSizePct(req.getPositionSize() / 100.0)
                     .commissionPct(0.001)
                     .slippagePct(0.0)
                     .build())
