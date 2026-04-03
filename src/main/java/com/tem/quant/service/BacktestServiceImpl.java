@@ -27,7 +27,7 @@ public class BacktestServiceImpl implements BacktestService {
                     .ticker(req.getTicker())
                     .startDate(req.getStartDate())
                     .endDate(req.getEndDate())
-                    .interval("1d")
+                    .interval(req.getInterval())
                     .build())
                 .strategy(PyBacktestRequest.StrategyConfig.builder()
                     .signalMode(req.getSignalMode())

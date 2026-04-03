@@ -7,9 +7,10 @@ public class StrategyRequest {
     private String name = "나의 전략";
 
     // 파이썬 API 연동용 필드
-    private String ticker = "BTC-USD";
+    private String ticker = "BTCUSDT";
     private String startDate;
     private String endDate;
+    private String interval = "1d"; // 5m, 15m, 60m, 1d
     private String signalMode = "COMBINED"; // RSI_ONLY, LR_ONLY, COMBINED
     private Double initialCapital = 10000.0;
 

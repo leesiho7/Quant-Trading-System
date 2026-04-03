@@ -154,9 +154,18 @@
                     <h3 class="text-sm font-semibold text-white mb-3">종목 및 기간 설정</h3>
                     <div class="space-y-3">
                         <div>
-                            <label class="text-xs text-slate-400 mb-1 block">티커 (Yahoo Finance 형식)</label>
-                            <input type="text" id="ticker-input" value="BTC-USD" placeholder="BTC-USD, AAPL, TSLA 등"
+                            <label class="text-xs text-slate-400 mb-1 block">티커 (Bybit 심볼)</label>
+                            <input type="text" id="ticker-input" value="BTCUSDT" placeholder="BTCUSDT, ETHUSDT, SOLUSDT 등"
                                 class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm placeholder-slate-500">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1 block">타임프레임</label>
+                            <select id="interval-select" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm">
+                                <option value="5m">5분봉</option>
+                                <option value="15m">15분봉</option>
+                                <option value="60m">1시간봉</option>
+                                <option value="1d" selected>일봉</option>
+                            </select>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -600,9 +609,10 @@
             const endDate   = document.getElementById('end-date-input').value   || today;
 
             const payload = {
-                ticker:         document.getElementById('ticker-input').value.trim() || 'BTC-USD',
+                ticker:         document.getElementById('ticker-input').value.trim() || 'BTCUSDT',
                 startDate:      startDate,
                 endDate:        endDate,
+                interval:       document.getElementById('interval-select').value,
                 signalMode:     signalMode,
                 initialCapital: parseFloat(document.getElementById('initial-capital-input').value) || 10000,
                 rsiPeriod:      parseInt(document.getElementById('rsi-period-slider').value),
